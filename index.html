@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>modestflag</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gb-bg0: #282828;
+      --gb-bg1: #3c3836;
+      --gb-fg: #ebdbb2;
+      --gb-fg-dim: #a89984;
+      --gb-orange: #fe8019;
+      --gb-orange-dim: #d65d0e;
+      --gb-aqua: #8ec07c;
+      --gb-line: #504945;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--gb-fg);
+      background: var(--gb-bg0);
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      flex-shrink: 0;
+      width: 200px;
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      background: var(--gb-bg0);
+    }
+
+    .sidebar a {
+      color: var(--gb-fg-dim);
+      text-decoration: none;
+      padding: 0.45rem 0.65rem;
+      border-radius: 4px;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+
+    .sidebar a:hover,
+    .sidebar a:focus-visible {
+      color: var(--gb-orange);
+      /* background: var(--gb-bg1); */
+      outline: none;
+    }
+
+    .divider {
+      flex-shrink: 0;
+      width: 1px;
+      min-height: 100vh;
+      background: var(--gb-line);
+      align-self: stretch;
+      margin-left: 1rem;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 3rem 3rem;
+      max-width: 52rem;
+    }
+
+    section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 1.5rem;
+    }
+
+    section h1 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--gb-aqua);
+      margin: 0 0 1rem;
+    }
+
+    section p {
+      margin: 0;
+      color: var(--gb-fg);
+    }
+
+    .brand {
+      font-weight: 600;
+      color: var(--gb-orange);
+      margin-bottom: 1.25rem;
+      padding: 0 0.65rem;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <div class="divider" aria-hidden="true"></div>
+    <nav class="sidebar" aria-label="Main">
+      <div class="brand">modestflag</div>
+      <a href="#home">Home</a>
+      <a href="#resume">Resume</a>
+      <a href="#dsp">DSP</a>
+      <a href="#media">Media</a>
+    </nav>
+    <main>
+      <section id="home">
+        <h1>Home</h1>
+        <p>Welcome. Use the links on the left to jump to each section.</p>
+      </section>
+      <section id="resume">
+        <h1>Resume</h1>
+        <p>Resume content goes here.</p>
+      </section>
+      <section id="dsp">
+        <h1>DSP</h1>
+        <p>Digital signal processing notes or projects go here.</p>
+      </section>
+      <section id="media">
+        <h1>Media</h1>
+        <p>Photos, video, or other media links go here.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+[
+  {
+    "title": "WIP Game",
+    "label": "WIP Game",
+    "source": "WIP_Game.md",
+    "href": "content/wip_game.html",
+    "tags": [],
+    "date": "2026-07-20T02:24:45.276Z"
+  },
+  {
+    "title": "Japanese",
+    "label": "Japanese Notes",
+    "source": "Japanese_Notes.md",
+    "href": "content/japanese_notes.html",
+    "tags": [],
+    "date": "2026-07-20T02:22:50.866Z"
+  },
+  {
+    "title": "Gavin McGuire",
+    "label": "Resume",
+    "source": "Resume.md",
+    "href": "content/resume.html",
+    "tags": [],
+    "date": "2026-07-20T02:15:16.684Z"
+  },
+  {
+    "title": "DSP",
+    "label": "DSP",
+    "source": "DSP.md",
+    "href": "content/dsp.html",
+    "tags": [],
+    "date": "2026-07-20T02:15:16.678Z"
+  }
+]

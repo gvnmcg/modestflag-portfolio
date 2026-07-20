@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Layer Editor</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #17181c;
+    --panel: #1f2126;
+    --panel-alt: #26282f;
+    --border: #34363d;
+    --text: #e7e7ea;
+    --muted: #9a9ca3;
+    --accent: #5b8cff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  [hidden] { display: none !important; }
+
+  /* ---------- setup screen ---------- */
+  #setup-screen {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #setup-form {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 280px;
+  }
+  #setup-form h1 {
+    margin: 0 0 4px;
+    font-size: 18px;
+  }
+  #setup-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  #setup-form input[type="number"] {
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+  #setup-form .dims-row {
+    display: flex;
+    gap: 12px;
+  }
+  #setup-form .dims-row label { flex: 1; }
+  #setup-form button {
+    margin-top: 8px;
+  }
+
+  /* ---------- buttons ---------- */
+  button {
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  button.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  button.icon-btn {
+    padding: 6px 8px;
+    line-height: 1;
+  }
+
+  /* ---------- editor screen ---------- */
+  #editor-screen {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  #toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  #toolbar .tool-group {
+    display: flex;
+    gap: 6px;
+    padding-right: 10px;
+    border-right: 1px solid var(--border);
+  }
+  #toolbar .tool-group:last-of-type { border-right: none; }
+  #toolbar label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  #toolbar input[type="color"] {
+    width: 32px;
+    height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0;
+    background: none;
+  }
+  #toolbar input[type="range"] { width: 100px; }
+  #size-readout { color: var(--muted); font-size: 12px; width: 28px; }
+
+  #main {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  /* ---------- layers panel ---------- */
+  #layers-panel {
+    width: 360px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    min-height: 0;
+  }
+  #layers-header {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  #layers-header button { flex: 1; }
+  #layers-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .layer-row {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--panel-alt);
+  }
+  .layer-row.dragging { opacity: 0.4; }
+  .layer-row.hidden-layer .canvas-wrap { opacity: 0.35; }
+  .layer-row.collapsed .opacity-row,
+  .layer-row.collapsed .canvas-wrap { display: none; }
+
+  .layer-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drag-handle {
+    cursor: grab;
+    color: var(--muted);
+    padding: 0 2px;
+    user-select: none;
+  }
+  .collapse-toggle {
+    cursor: pointer;
+    color: var(--muted);
+    padding: 0 2px;
+    user-select: none;
+    font-size: 11px;
+    width: 12px;
+    text-align: center;
+  }
+  .layer-name {
+    flex: 1;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    font-size: 13px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    min-width: 0;
+  }
+  .layer-name:hover, .layer-name:focus {
+    border-color: var(--border);
+    background: var(--panel);
+    outline: none;
+  }
+  .layer-visible { cursor: pointer; font-size: 15px; }
+
+  .opacity-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .opacity-row input[type="range"] { flex: 1; }
+  .opacity-value { width: 34px; text-align: right; }
+
+  .canvas-wrap {
+    background: #000;
+    line-height: 0;
+  }
+  .canvas-wrap canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    touch-action: none;
+    cursor: crosshair;
+    image-rendering: pixelated;
+  }
+
+  /* ---------- composite panel ---------- */
+  #composite-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-width: 0;
+    min-height: 0;
+  }
+  #composite-canvas {
+    display: block;
+    image-rendering: pixelated;
+    background-image:
+      linear-gradient(45deg, #4a4a4a 25%, transparent 25%),
+      linear-gradient(-45deg, #4a4a4a 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #4a4a4a 75%),
+      linear-gradient(-45deg, transparent 75%, #4a4a4a 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color: #6b6b6b;
+    box-shadow: 0 0 0 1px var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div id="setup-screen">
+  <form id="setup-form">
+    <h1>New Layered Image</h1>
+    <div class="dims-row">
+      <label>Width (px)
+        <input type="number" id="setup-w" value="512" min="1" max="4096" required>
+      </label>
+      <label>Height (px)
+        <input type="number" id="setup-h" value="512" min="1" max="4096" required>
+      </label>
+    </div>
+    <button type="submit" class="active">Create</button>
+  </form>
+</div>
+
+<div id="editor-screen" hidden>
+  <div id="toolbar">
+    <div class="tool-group" id="tool-buttons">
+      <button data-tool="brush" class="active" title="Brush">🖌 Brush</button>
+      <button data-tool="pen" title="Pen (hard-edged pixels, snapped to a size grid)">✏ Pen</button>
+      <button data-tool="eraser" title="Eraser">🧹 Eraser</button>
+      <button data-tool="line" title="Line">／ Line</button>
+      <button data-tool="rect" title="Rectangle">▭ Rect</button>
+      <button data-tool="circle" title="Circle">◯ Circle</button>
+    </div>
+    <div class="tool-group">
+      <label>Color <input type="color" id="color-picker" value="#ffffff"></label>
+      <label>Size
+        <input type="range" id="size-slider" min="1" max="100" value="10">
+        <span id="size-readout">10</span>
+      </label>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="layers-panel">
+      <div id="layers-header">
+        <button id="add-layer-btn">+ Add Layer</button>
+        <button id="download-all-btn">⬇ Download All</button>
+      </div>
+      <div id="layers-list"></div>
+    </div>
+    <div id="composite-panel">
+      <canvas id="composite-canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  let W = 0, H = 0;
+  let layers = [];      // bottom -> top of stack
+  let layerCounter = 0;
+  let currentTool = "brush";
+  let currentColor = "#ffffff";
+  let currentSize = 10;
+
+  const setupScreen = document.getElementById("setup-screen");
+  const setupForm = document.getElementById("setup-form");
+  const editorScreen = document.getElementById("editor-screen");
+  const layersList = document.getElementById("layers-list");
+  const compositePanel = document.getElementById("composite-panel");
+  const compositeCanvas = document.getElementById("composite-canvas");
+  const compositeCtx = compositeCanvas.getContext("2d");
+  compositeCtx.imageSmoothingEnabled = false;
+
+  // ---------- setup ----------
+  setupForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    W = Math.max(1, parseInt(document.getElementById("setup-w").value, 10) || 512);
+    H = Math.max(1, parseInt(document.getElementById("setup-h").value, 10) || 512);
+    compositeCanvas.width = W;
+    compositeCanvas.height = H;
+    setupScreen.hidden = true;
+    editorScreen.hidden = false;
+    addLayer();
+    fitCompositeCanvas();
+  });
+
+  // ---------- composite sizing (fill the panel, preserving aspect ratio) ----------
+  function fitCompositeCanvas() {
+    if (!W || !H) return;
+    const style = getComputedStyle(compositePanel);
+    const padX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+    const padY = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+    const availW = compositePanel.clientWidth - padX;
+    const availH = compositePanel.clientHeight - padY;
+    if (availW <= 0 || availH <= 0) return;
+    const scale = Math.min(availW / W, availH / H);
+    compositeCanvas.style.width = Math.max(1, Math.floor(W * scale)) + "px";
+    compositeCanvas.style.height = Math.max(1, Math.floor(H * scale)) + "px";
+  }
+  new ResizeObserver(fitCompositeCanvas).observe(compositePanel);
+
+  // ---------- toolbar ----------
+  document.getElementById("tool-buttons").addEventListener("click", function (e) {
+    const btn = e.target.closest("button[data-tool]");
+    if (!btn) return;
+    currentTool = btn.dataset.tool;
+    document.querySelectorAll("#tool-buttons button").forEach(b => b.classList.toggle("active", b === btn));
+  });
+
+  document.getElementById("color-picker").addEventListener("input", function (e) {
+    currentColor = e.target.value;
+  });
+
+  const sizeSlider = document.getElementById("size-slider");
+  const sizeReadout = document.getElementById("size-readout");
+  sizeSlider.addEventListener("input", function (e) {
+    currentSize = parseInt(e.target.value, 10);
+    sizeReadout.textContent = currentSize;
+  });
+
+  document.getElementById("add-layer-btn").addEventListener("click", () => addLayer());
+  document.getElementById("download-all-btn").addEventListener("click", downloadAllLayers);
+
+  // ---------- compositing (rAF-batched) ----------
+  let compositeQueued = false;
+  function requestComposite() {
+    if (compositeQueued) return;
+    compositeQueued = true;
+    requestAnimationFrame(function () {
+      compositeQueued = false;
+      compositeCtx.clearRect(0, 0, W, H);
+      for (const layer of layers) {
+        if (!layer.visible) continue;
+        compositeCtx.globalAlpha = layer.opacity;
+        compositeCtx.drawImage(layer.canvas, 0, 0);
+      }
+      compositeCtx.globalAlpha = 1;
+    });
+  }
+
+  // ---------- layer creation ----------
+  function addLayer() {
+    layerCounter++;
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+
+    const layer = {
+      id: "layer-" + layerCounter,
+      name: "Layer " + layerCounter,
+      canvas: canvas,
+      visible: true,
+      opacity: 1
+    };
+    layers.push(layer);
+
+    const row = buildLayerRow(layer);
+    layer.rowEl = row;
+    layersList.insertBefore(row, layersList.firstChild); // newest/top layer shown first
+
+    attachDrawing(layer);
+    requestComposite();
+  }
+
+  function buildLayerRow(layer) {
+    const row = document.createElement("div");
+    row.className = "layer-row";
+    row.dataset.id = layer.id;
+
+    // header
+    const header = document.createElement("div");
+    header.className = "layer-header";
+
+    const handle = document.createElement("span");
+    handle.className = "drag-handle";
+    handle.draggable = true;
+    handle.textContent = "⠿";
+
+    const collapseToggle = document.createElement("span");
+    collapseToggle.className = "collapse-toggle";
+    collapseToggle.title = "Collapse/expand layer";
+    collapseToggle.textContent = "▾";
+    collapseToggle.addEventListener("click", () => {
+      const collapsed = row.classList.toggle("collapsed");
+      collapseToggle.textContent = collapsed ? "▸" : "▾";
+    });
+
+    const nameInput = document.createElement("input");
+    nameInput.className = "layer-name";
+    nameInput.value = layer.name;
+    nameInput.addEventListener("input", () => { layer.name = nameInput.value; });
+
+    const visToggle = document.createElement("span");
+    visToggle.className = "layer-visible";
+    visToggle.title = "Toggle visibility";
+    visToggle.textContent = "👁";
+    visToggle.addEventListener("click", () => {
+      layer.visible = !layer.visible;
+      row.classList.toggle("hidden-layer", !layer.visible);
+      visToggle.style.opacity = layer.visible ? "1" : "0.35";
+      requestComposite();
+    });
+
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "icon-btn";
+    downloadBtn.title = "Download layer as PNG";
+    downloadBtn.textContent = "⬇";
+    downloadBtn.addEventListener("click", () => downloadLayer(layer));
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "icon-btn";
+    deleteBtn.title = "Delete layer";
+    deleteBtn.textContent = "✕";
+    deleteBtn.addEventListener("click", () => deleteLayer(layer));
+
+    header.append(handle, collapseToggle, nameInput, visToggle, downloadBtn, deleteBtn);
+
+    // opacity
+    const opacityRow = document.createElement("div");
+    opacityRow.className = "opacity-row";
+    const opacityLabel = document.createElement("span");
+    opacityLabel.textContent = "Opacity";
+    const opacitySlider = document.createElement("input");
+    opacitySlider.type = "range";
+    opacitySlider.min = "0";
+    opacitySlider.max = "100";
+    opacitySlider.value = "100";
+    const opacityValue = document.createElement("span");
+    opacityValue.className = "opacity-value";
+    opacityValue.textContent = "100%";
+    opacitySlider.addEventListener("input", () => {
+      layer.opacity = parseInt(opacitySlider.value, 10) / 100;
+      opacityValue.textContent = opacitySlider.value + "%";
+      requestComposite();
+    });
+    opacityRow.append(opacityLabel, opacitySlider, opacityValue);
+
+    // canvas
+    const canvasWrap = document.createElement("div");
+    canvasWrap.className = "canvas-wrap";
+    canvasWrap.appendChild(layer.canvas);
+
+    row.append(header, opacityRow, canvasWrap);
+
+    // drag-to-reorder
+    handle.addEventListener("dragstart", (e) => {
+      row.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", layer.id);
+    });
+    handle.addEventListener("dragend", () => {
+      row.classList.remove("dragging");
+      syncLayersFromDOM();
+      requestComposite();
+    });
+
+    return row;
+  }
+
+  layersList.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    const dragging = layersList.querySelector(".layer-row.dragging");
+    if (!dragging) return;
+    const after = rowAfterPoint(e.clientY);
+    if (after == null) {
+      layersList.appendChild(dragging);
+    } else {
+      layersList.insertBefore(dragging, after);
+    }
+  });
+
+  function rowAfterPoint(y) {
+    const rows = [...layersList.querySelectorAll(".layer-row:not(.dragging)")];
+    let closest = { offset: -Infinity, element: null };
+    for (const row of rows) {
+      const box = row.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        closest = { offset, element: row };
+      }
+    }
+    return closest.element;
+  }
+
+  function syncLayersFromDOM() {
+    const domIds = [...layersList.querySelectorAll(".layer-row")].map(r => r.dataset.id);
+    // DOM is displayed top-of-stack first; layers[] is bottom-of-stack first.
+    const byId = new Map(layers.map(l => [l.id, l]));
+    layers = domIds.map(id => byId.get(id)).reverse();
+  }
+
+  function deleteLayer(layer) {
+    layers = layers.filter(l => l.id !== layer.id);
+    layer.rowEl.remove();
+    requestComposite();
+  }
+
+  // ---------- drawing ----------
+  function getPos(e, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  function drawSegment(ctx, x0, y0, x1, y1) {
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = currentSize;
+    if (currentTool === "eraser") {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.strokeStyle = "rgba(0,0,0,1)";
+    } else {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.strokeStyle = currentColor;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.globalCompositeOperation = "source-over";
+  }
+
+  function penDab(ctx, x, y) {
+    const s = Math.max(1, Math.round(currentSize));
+    const gx = Math.floor(x / s) * s;
+    const gy = Math.floor(y / s) * s;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = currentColor;
+    ctx.fillRect(gx, gy, s, s);
+  }
+
+  function drawPenSegment(ctx, x0, y0, x1, y1) {
+    const dist = Math.hypot(x1 - x0, y1 - y0);
+    const step = Math.max(1, currentSize / 2);
+    const steps = Math.max(1, Math.ceil(dist / step));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      penDab(ctx, x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
+    }
+  }
+
+  function drawShapePreview(ctx, x0, y0, x1, y1) {
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = currentSize;
+    ctx.strokeStyle = currentColor;
+    ctx.globalCompositeOperation = "source-over";
+    ctx.beginPath();
+    if (currentTool === "line") {
+      ctx.moveTo(x0, y0);
+      ctx.lineTo(x1, y1);
+    } else if (currentTool === "rect") {
+      ctx.rect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0));
+    } else if (currentTool === "circle") {
+      const rx = Math.abs(x1 - x0) / 2;
+      const ry = Math.abs(y1 - y0) / 2;
+      const cx = (x0 + x1) / 2;
+      const cy = (y0 + y1) / 2;
+      ctx.ellipse(cx, cy, Math.max(rx, 0.01), Math.max(ry, 0.01), 0, 0, Math.PI * 2);
+    }
+    ctx.stroke();
+  }
+
+  function attachDrawing(layer) {
+    const canvas = layer.canvas;
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = false;
+    let drawing = false;
+    let lastX = 0, lastY = 0, startX = 0, startY = 0;
+    let snapshot = null;
+
+    canvas.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      canvas.setPointerCapture(e.pointerId);
+      const pos = getPos(e, canvas);
+      drawing = true;
+      startX = lastX = pos.x;
+      startY = lastY = pos.y;
+
+      if (currentTool === "line" || currentTool === "rect" || currentTool === "circle") {
+        snapshot = ctx.getImageData(0, 0, W, H);
+      } else if (currentTool === "pen") {
+        penDab(ctx, pos.x, pos.y);
+      } else {
+        drawSegment(ctx, pos.x, pos.y, pos.x, pos.y);
+      }
+      requestComposite();
+    });
+
+    canvas.addEventListener("pointermove", function (e) {
+      if (!drawing) return;
+      const pos = getPos(e, canvas);
+      if (currentTool === "brush" || currentTool === "eraser") {
+        drawSegment(ctx, lastX, lastY, pos.x, pos.y);
+        lastX = pos.x;
+        lastY = pos.y;
+      } else if (currentTool === "pen") {
+        drawPenSegment(ctx, lastX, lastY, pos.x, pos.y);
+        lastX = pos.x;
+        lastY = pos.y;
+      } else if (snapshot) {
+        ctx.putImageData(snapshot, 0, 0);
+        drawShapePreview(ctx, startX, startY, pos.x, pos.y);
+      }
+      requestComposite();
+    });
+
+    function endStroke(e) {
+      if (!drawing) return;
+      drawing = false;
+      snapshot = null;
+    }
+    canvas.addEventListener("pointerup", endStroke);
+    canvas.addEventListener("pointercancel", endStroke);
+  }
+
+  // ---------- export ----------
+  function downloadLayer(layer) {
+    layer.canvas.toBlob(function (blob) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = (layer.name || layer.id).trim() + ".png";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, "image/png");
+  }
+
+  function downloadAllLayers() {
+    layers.forEach(function (layer, i) {
+      setTimeout(() => downloadLayer(layer), i * 250);
+    });
+  }
+})();
+</script>
+</body>
+</html>

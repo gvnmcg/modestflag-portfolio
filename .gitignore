@@ -1,1 +1,4 @@
 node_modules
+private/config.php
+app/uploads/*
+!app/uploads/.gitkeep

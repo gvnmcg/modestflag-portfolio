@@ -1,0 +1,1369 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Write</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000;
+      --panel: #0a0a0a;
+      --panel-alt: #141414;
+      --border: #3a3a3a;
+      --border-light: #5a5a5a;
+      --text: #f2f2f2;
+      --muted: #999;
+      --danger: #d13b3b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-weight: 600;
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    /* ---------- form basics ---------- */
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    textarea,
+    select {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--border-light);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    textarea.call-box {
+      min-height: 44px;
+      max-width: 420px;
+    }
+
+    textarea.response-box {
+      min-height: 160px;
+      width: 100%;
+    }
+
+    input[type="range"] {
+      accent-color: var(--text);
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-row input[type="range"] {
+      flex: 1;
+    }
+
+    .range-row .range-value {
+      width: 22px;
+      text-align: right;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    button {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      padding: 7px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--border-light);
+    }
+
+    button.primary {
+      border-color: var(--border-light);
+    }
+
+    button.danger {
+      color: var(--danger);
+      border-color: var(--danger);
+      background: transparent;
+    }
+
+    button.danger:hover {
+      background: rgba(209, 59, 59, 0.1);
+    }
+
+    button.icon-btn {
+      padding: 5px 8px;
+      font-size: 12px;
+    }
+
+    button.link-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--muted);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    button.link-btn:hover {
+      color: var(--text);
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 12px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    #demo-banner {
+      background: #332900;
+      color: #e0c25a;
+      border-bottom: 1px solid #5a4a1a;
+      padding: 6px 14px;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    /* ---------- login screen ---------- */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #login-form {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 280px;
+    }
+
+    #login-form h1 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    /* ---------- app shell ---------- */
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    #breadcrumb .crumb-sep {
+      color: var(--muted);
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    #layout {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+
+    #main-view {
+      flex: 1;
+      padding: 24px;
+      max-width: 900px;
+    }
+
+    .view-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    /* ---------- card lists ---------- */
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .card:hover {
+      border-color: var(--border-light);
+    }
+
+    .card-thumb {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: var(--muted);
+      flex-shrink: 0;
+      overflow: hidden;
+      background: var(--panel-alt);
+    }
+
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .card-body .card-title {
+      font-size: 14px;
+    }
+
+    .card-body .card-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .empty-state {
+      color: var(--muted);
+      padding: 20px 0;
+    }
+
+    /* ---------- npc detail ---------- */
+    .npc-detail {
+      display: flex;
+      gap: 20px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+
+    .art-box {
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      background: var(--panel-alt);
+    }
+
+    .art-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .npc-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .npc-info h2 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .npc-info .npc-desc {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .trait-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 4px 16px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .npc-info-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .upload-label {
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ---------- responses ---------- */
+    .response-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .response-card .rc-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .response-card .rc-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .response-card .rc-call {
+      flex: 0 0 260px;
+    }
+
+    .response-card .rc-response {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .response-card .rc-text {
+      white-space: pre-wrap;
+    }
+
+    .response-card .rc-call .rc-text {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      min-height: 40px;
+    }
+
+    .response-card .rc-response .rc-text {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px;
+      min-height: 80px;
+    }
+
+    .response-card .rc-effect {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .response-card .rc-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      justify-content: flex-end;
+    }
+
+    /* ---------- json panel ---------- */
+    #json-panel {
+      width: 340px;
+      flex-shrink: 0;
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .json-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    #json-output {
+      margin: 0;
+      padding: 14px;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ---------- dialogs ---------- */
+    dialog {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 24px;
+      width: 420px;
+      max-width: 90vw;
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    dialog h3 {
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .dims-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .dims-row label {
+      flex: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="demo-banner" hidden>Demo mode — no PHP backend detected. Data is stored only in this browser. Any password
+    works.</div>
+
+  <div id="login-screen">
+    <form id="login-form">
+      <h1>Game Write</h1>
+      <label>Password
+        <input type="password" id="login-password" autocomplete="current-password" required>
+      </label>
+      <div id="login-error" class="error" hidden></div>
+      <button type="submit" class="primary">Enter</button>
+    </form>
+  </div>
+
+  <div id="app" hidden>
+    <header id="topbar">
+      <div id="breadcrumb"></div>
+      <div class="spacer"></div>
+      <button id="json-toggle-btn" class="icon-btn">JSON</button>
+      <button id="logout-btn" class="icon-btn">Log out</button>
+    </header>
+
+    <div id="layout">
+      <main id="main-view">
+
+        <section id="locations-view" class="view">
+          <div class="view-header">
+            <h2>Locations</h2>
+            <button id="new-location-btn" class="primary">+ New Location</button>
+          </div>
+          <div id="locations-list" class="card-list"></div>
+        </section>
+
+        <section id="npcs-view" class="view" hidden>
+          <div class="view-header">
+            <h2 id="npcs-heading">NPCs</h2>
+            <button id="new-npc-btn" class="primary">+ New NPC</button>
+          </div>
+          <div id="npcs-list" class="card-list"></div>
+        </section>
+
+        <section id="responses-view" class="view" hidden>
+          <div class="npc-detail">
+            <div id="npc-art-box" class="art-box">No Art</div>
+            <div class="npc-info">
+              <h2 id="npc-detail-name"></h2>
+              <div id="npc-detail-desc" class="npc-desc"></div>
+              <div id="npc-detail-traits" class="trait-grid"></div>
+              <div class="npc-info-actions">
+                <button id="edit-npc-btn" class="icon-btn">Edit NPC</button>
+                <label class="upload-label">Upload art
+                  <input type="file" id="npc-art-input" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-header">
+            <h2>Responses</h2>
+            <button id="new-response-btn" class="primary">+ New Response</button>
+          </div>
+          <div id="responses-list"></div>
+        </section>
+
+      </main>
+
+      <aside id="json-panel" hidden>
+        <div class="json-panel-header">
+          <span>JSON</span>
+          <button id="json-close-btn" class="icon-btn">Close</button>
+        </div>
+        <pre id="json-output"></pre>
+      </aside>
+    </div>
+  </div>
+
+  <dialog id="location-modal">
+    <h3 id="location-modal-title">New Location</h3>
+    <form id="location-form">
+      <label>Name <input type="text" id="loc-name" required></label>
+      <div class="dims-row">
+        <label>X <input type="number" id="loc-x" value="0"></label>
+        <label>Y <input type="number" id="loc-y" value="0"></label>
+        <label>Size <input type="number" id="loc-size" value="0"></label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="loc-delete danger" hidden>Delete</button>
+        <div class="spacer"></div>
+        <button type="button" class="cancel-btn">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="npc-modal">
+    <h3 id="npc-modal-title">New NPC</h3>
+    <form id="npc-form">
+      <label>Name <input type="text" id="npc-name" required></label>
+      <label>Description <textarea id="npc-desc" rows="3"></textarea></label>
+      <label>Disposition (hostile -5 to friendly 5)
+        <div class="range-row">
+          <input type="range" id="npc-disposition" min="-5" max="5" value="0">
+          <span class="range-value" id="npc-disposition-val">0</span>
+        </div>
+      </label>
+      <label>Openness
+        <div class="range-row">
+          <input type="range" id="npc-openness" min="1" max="10" value="5">
+          <span class="range-value" id="npc-openness-val">5</span>
+        </div>
+      </label>
+      <label>Conscientiousness
+        <div class="range-row">
+          <input type="range" id="npc-conscientiousness" min="1" max="10" value="5">
+          <span class="range-value" id="npc-conscientiousness-val">5</span>
+        </div>
+      </label>
+      <label>Extraversion
+        <div class="range-row">
+          <input type="range" id="npc-extraversion" min="1" max="10" value="5">
+          <span class="range-value" id="npc-extraversion-val">5</span>
+        </div>
+      </label>
+      <label>Agreeableness
+        <div class="range-row">
+          <input type="range" id="npc-agreeableness" min="1" max="10" value="5">
+          <span class="range-value" id="npc-agreeableness-val">5</span>
+        </div>
+      </label>
+      <label>Neuroticism
+        <div class="range-row">
+          <input type="range" id="npc-neuroticism" min="1" max="10" value="5">
+          <span class="range-value" id="npc-neuroticism-val">5</span>
+        </div>
+      </label>
+      <div class="dialog-actions">
+        <button type="button" class="npc-delete danger" hidden>Delete</button>
+        <div class="spacer"></div>
+        <button type="button" class="cancel-btn">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="response-modal">
+    <h3 id="response-modal-title">New Response</h3>
+    <form id="response-form">
+      <label>Call <textarea id="resp-call" class="call-box" rows="2" required></textarea></label>
+      <label>Response <textarea id="resp-response" class="response-box" rows="6" required></textarea></label>
+      <label>Effect <input type="text" id="resp-effect" placeholder="e.g. trust+1"></label>
+      <div class="dialog-actions">
+        <button type="button" class="resp-delete danger" hidden>Delete</button>
+        <div class="spacer"></div>
+        <button type="button" class="cancel-btn">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const state = { location: null, npc: null, responses: [] };
+
+      const el = (id) => document.getElementById(id);
+
+      let mockMode = false;
+
+      function enableMockMode() {
+        if (mockMode) return;
+        mockMode = true;
+        el("demo-banner").hidden = false;
+      }
+
+      async function api(path, method, body) {
+        if (mockMode) return mockApi(path, method, body);
+
+        const opts = { method: method || "GET", headers: {} };
+        if (body !== undefined) {
+          opts.headers["Content-Type"] = "application/json";
+          opts.body = JSON.stringify(body);
+        }
+
+        let res;
+        try {
+          res = await fetch("api/" + path, opts);
+        } catch (networkErr) {
+          // No server responding at all (e.g. opened straight from disk) - fall back to the mock backend.
+          enableMockMode();
+          return mockApi(path, method, body);
+        }
+
+        if (res.status === 401) {
+          showLogin();
+          throw new Error("Not authenticated");
+        }
+
+        let data;
+        try {
+          data = await res.json();
+        } catch (parseErr) {
+          // A static file server with no PHP interpreter returns the raw .php source instead of JSON.
+          enableMockMode();
+          return mockApi(path, method, body);
+        }
+
+        if (!res.ok) throw new Error(data.error || "Request failed");
+        return data;
+      }
+
+      // ---------- mock backend (used when no PHP/MySQL server is available) ----------
+
+      const MOCK_DB_KEY = "gw_mock_db_v1";
+      const MOCK_TRAITS = ["disposition", "openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"];
+
+      function loadMockDb() {
+        let db;
+        try {
+          db = JSON.parse(localStorage.getItem(MOCK_DB_KEY));
+        } catch (e) {
+          db = null;
+        }
+        if (!db) {
+          db = seedMockDb();
+          saveMockDb(db);
+        }
+        return db;
+      }
+
+      function saveMockDb(db) {
+        localStorage.setItem(MOCK_DB_KEY, JSON.stringify(db));
+      }
+
+      function seedMockDb() {
+        return {
+          locations: [{ id: 1, name: "Rusty Anchor Tavern", x: 12, y: 4, size: 3 }],
+          npcs: [{
+            id: 1, location_id: 1, name: "Old Marta", description: "The tavern keeper. Seen it all.",
+            disposition: 1, openness: 4, conscientiousness: 6, extraversion: 7, agreeableness: 6, neuroticism: 3, art: null,
+          }],
+          responses: [{ id: 1, npc_id: 1, call: "Any rumors going around?", response: "Aye. Something's stirring in the old mines again. Third traveler this week to ask.", effect: "" }],
+        };
+      }
+
+      function nextMockId(db, key) {
+        return db[key].reduce(function (max, row) { return Math.max(max, row.id); }, 0) + 1;
+      }
+
+      async function mockApi(path, method, body) {
+        method = method || "GET";
+        const [file, qs] = path.split("?");
+        const params = new URLSearchParams(qs || "");
+        const db = loadMockDb();
+
+        function traitsFromBody(existing) {
+          const out = {};
+          MOCK_TRAITS.forEach(function (t) {
+            const def = existing ? existing[t] : (t === "disposition" ? 0 : 5);
+            out[t] = (body && body[t] !== undefined) ? Number(body[t]) : def;
+          });
+          return out;
+        }
+
+        if (file === "login.php") {
+          if (method === "GET") return { authed: sessionStorage.getItem("gw_mock_authed") === "1" };
+          if (method === "POST") {
+            if (!body || !String(body.password || "").trim()) throw new Error("Password required");
+            sessionStorage.setItem("gw_mock_authed", "1");
+            return { ok: true };
+          }
+          if (method === "DELETE") {
+            sessionStorage.removeItem("gw_mock_authed");
+            return { ok: true };
+          }
+        }
+
+        if (file === "locations.php") {
+          if (method === "GET") {
+            if (params.get("id")) {
+              const row = db.locations.find(function (l) { return l.id === Number(params.get("id")); });
+              if (!row) throw new Error("Location not found");
+              return row;
+            }
+            return db.locations.slice().sort(function (a, b) { return a.name.localeCompare(b.name); });
+          }
+          if (method === "POST") {
+            const row = { id: nextMockId(db, "locations"), name: body.name, x: Number(body.x) || 0, y: Number(body.y) || 0, size: Number(body.size) || 0 };
+            db.locations.push(row);
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "PUT") {
+            const id = Number(params.get("id"));
+            const row = db.locations.find(function (l) { return l.id === id; });
+            if (!row) throw new Error("Location not found");
+            Object.assign(row, { name: body.name, x: Number(body.x) || 0, y: Number(body.y) || 0, size: Number(body.size) || 0 });
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "DELETE") {
+            const id = Number(params.get("id"));
+            db.locations = db.locations.filter(function (l) { return l.id !== id; });
+            const deadNpcIds = db.npcs.filter(function (n) { return n.location_id === id; }).map(function (n) { return n.id; });
+            db.npcs = db.npcs.filter(function (n) { return n.location_id !== id; });
+            db.responses = db.responses.filter(function (r) { return deadNpcIds.indexOf(r.npc_id) === -1; });
+            saveMockDb(db);
+            return { ok: true };
+          }
+        }
+
+        if (file === "npcs.php") {
+          if (method === "GET") {
+            if (params.get("id")) {
+              const row = db.npcs.find(function (n) { return n.id === Number(params.get("id")); });
+              if (!row) throw new Error("NPC not found");
+              return row;
+            }
+            if (params.get("location_id")) {
+              const locId = Number(params.get("location_id"));
+              return db.npcs.filter(function (n) { return n.location_id === locId; })
+                .sort(function (a, b) { return a.name.localeCompare(b.name); });
+            }
+            throw new Error("location_id or id is required");
+          }
+          if (method === "POST") {
+            const row = Object.assign(
+              { id: nextMockId(db, "npcs"), location_id: Number(body.location_id), name: body.name, description: body.description || "", art: null },
+              traitsFromBody(null)
+            );
+            db.npcs.push(row);
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "PUT") {
+            const id = Number(params.get("id"));
+            const row = db.npcs.find(function (n) { return n.id === id; });
+            if (!row) throw new Error("NPC not found");
+            Object.assign(row, { name: body.name, description: body.description || "" }, traitsFromBody(row));
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "DELETE") {
+            const id = Number(params.get("id"));
+            db.npcs = db.npcs.filter(function (n) { return n.id !== id; });
+            db.responses = db.responses.filter(function (r) { return r.npc_id !== id; });
+            saveMockDb(db);
+            return { ok: true };
+          }
+        }
+
+        if (file === "responses.php") {
+          if (method === "GET") {
+            if (params.get("id")) {
+              const row = db.responses.find(function (r) { return r.id === Number(params.get("id")); });
+              if (!row) throw new Error("Response not found");
+              return row;
+            }
+            if (params.get("npc_id")) {
+              const npcId = Number(params.get("npc_id"));
+              return db.responses.filter(function (r) { return r.npc_id === npcId; });
+            }
+            throw new Error("npc_id or id is required");
+          }
+          if (method === "POST") {
+            const row = { id: nextMockId(db, "responses"), npc_id: Number(body.npc_id), call: body.call, response: body.response, effect: body.effect || "" };
+            db.responses.push(row);
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "PUT") {
+            const id = Number(params.get("id"));
+            const row = db.responses.find(function (r) { return r.id === id; });
+            if (!row) throw new Error("Response not found");
+            Object.assign(row, { call: body.call, response: body.response, effect: body.effect || "" });
+            saveMockDb(db);
+            return row;
+          }
+          if (method === "DELETE") {
+            const id = Number(params.get("id"));
+            db.responses = db.responses.filter(function (r) { return r.id !== id; });
+            saveMockDb(db);
+            return { ok: true };
+          }
+        }
+
+        throw new Error("Unknown mock route: " + path);
+      }
+
+      function mockUploadArt(npcId, file) {
+        return new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onload = function () {
+            const db = loadMockDb();
+            const row = db.npcs.find(function (n) { return n.id === npcId; });
+            if (!row) { reject(new Error("NPC not found")); return; }
+            row.art = reader.result;
+            saveMockDb(db);
+            resolve({ art: row.art });
+          };
+          reader.onerror = function () { reject(new Error("Failed to read image")); };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // ---------- auth ----------
+
+      function showLogin() {
+        el("login-screen").hidden = false;
+        el("app").hidden = true;
+      }
+
+      function showApp() {
+        el("login-screen").hidden = true;
+        el("app").hidden = false;
+      }
+
+      el("login-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        el("login-error").hidden = true;
+        try {
+          await api("login.php", "POST", { password: el("login-password").value });
+          el("login-password").value = "";
+          showApp();
+          loadLocations();
+        } catch (err) {
+          el("login-error").textContent = err.message;
+          el("login-error").hidden = false;
+        }
+      });
+
+      el("logout-btn").addEventListener("click", async function () {
+        await api("login.php", "DELETE");
+        showLogin();
+      });
+
+      async function checkAuth() {
+        try {
+          const data = await api("login.php", "GET");
+          if (data.authed) {
+            showApp();
+            loadLocations();
+          } else {
+            showLogin();
+          }
+        } catch (err) {
+          showLogin();
+        }
+      }
+
+      // ---------- navigation / views ----------
+
+      function showView(name) {
+        ["locations", "npcs", "responses"].forEach(function (v) {
+          el(v + "-view").hidden = v !== name;
+        });
+        renderBreadcrumb();
+        renderJsonPanel();
+      }
+
+      function renderBreadcrumb() {
+        const parts = [];
+        parts.push({ label: "Locations", onClick: function () { state.location = null; state.npc = null; showView("locations"); } });
+        if (state.location) {
+          parts.push({ label: state.location.name, onClick: function () { state.npc = null; showView("npcs"); } });
+        }
+        if (state.npc) {
+          parts.push({ label: state.npc.name, onClick: null });
+        }
+        const bc = el("breadcrumb");
+        bc.innerHTML = "";
+        parts.forEach(function (part, i) {
+          if (i > 0) {
+            const sep = document.createElement("span");
+            sep.className = "crumb-sep";
+            sep.textContent = "›";
+            bc.appendChild(sep);
+          }
+          if (part.onClick) {
+            const btn = document.createElement("button");
+            btn.className = "link-btn";
+            btn.textContent = part.label;
+            btn.addEventListener("click", part.onClick);
+            bc.appendChild(btn);
+          } else {
+            const span = document.createElement("span");
+            span.textContent = part.label;
+            bc.appendChild(span);
+          }
+        });
+      }
+
+      // ---------- JSON panel ----------
+
+      el("json-toggle-btn").addEventListener("click", function () {
+        el("json-panel").hidden = !el("json-panel").hidden;
+        renderJsonPanel();
+      });
+      el("json-close-btn").addEventListener("click", function () {
+        el("json-panel").hidden = true;
+      });
+
+      function renderJsonPanel() {
+        if (el("json-panel").hidden) return;
+        const data = {
+          location: state.location,
+          npc: state.npc,
+          responses: state.npc ? state.responses : undefined,
+        };
+        el("json-output").textContent = JSON.stringify(data, null, 2);
+      }
+
+      // ---------- locations ----------
+
+      async function loadLocations() {
+        const list = el("locations-list");
+        list.innerHTML = "";
+        const locations = await api("locations.php", "GET");
+        if (!locations.length) {
+          list.innerHTML = '<div class="empty-state">No locations yet. Create one to get started.</div>';
+          return;
+        }
+        locations.forEach(function (loc) {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const thumb = document.createElement("div");
+          thumb.className = "card-thumb";
+          thumb.textContent = "MAP";
+
+          const body = document.createElement("div");
+          body.className = "card-body";
+          body.innerHTML = '<div class="card-title">' + escapeHtml(loc.name) + '</div>' +
+            '<div class="card-sub">x:' + loc.x + ' y:' + loc.y + ' size:' + loc.size + '</div>';
+          body.addEventListener("click", function () {
+            state.location = loc;
+            state.npc = null;
+            showView("npcs");
+            loadNpcs(loc.id);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "card-actions";
+          const editBtn = document.createElement("button");
+          editBtn.className = "icon-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", function (e) { e.stopPropagation(); openLocationModal(loc); });
+          actions.appendChild(editBtn);
+
+          card.appendChild(thumb);
+          card.appendChild(body);
+          card.appendChild(actions);
+          list.appendChild(card);
+        });
+      }
+
+      el("new-location-btn").addEventListener("click", function () { openLocationModal(null); });
+
+      function openLocationModal(loc) {
+        const modal = el("location-modal");
+        el("location-modal-title").textContent = loc ? "Edit Location" : "New Location";
+        el("loc-name").value = loc ? loc.name : "";
+        el("loc-x").value = loc ? loc.x : 0;
+        el("loc-y").value = loc ? loc.y : 0;
+        el("loc-size").value = loc ? loc.size : 0;
+        modal.dataset.id = loc ? loc.id : "";
+        const deleteBtn = modal.querySelector(".loc-delete");
+        deleteBtn.hidden = !loc;
+        modal.showModal();
+      }
+
+      el("location-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const modal = el("location-modal");
+        const payload = {
+          name: el("loc-name").value,
+          x: Number(el("loc-x").value) || 0,
+          y: Number(el("loc-y").value) || 0,
+          size: Number(el("loc-size").value) || 0,
+        };
+        const id = modal.dataset.id;
+        if (id) {
+          await api("locations.php?id=" + id, "PUT", payload);
+        } else {
+          await api("locations.php", "POST", payload);
+        }
+        modal.close();
+        loadLocations();
+      });
+
+      el("location-modal").querySelector(".loc-delete").addEventListener("click", async function () {
+        const modal = el("location-modal");
+        if (!confirm("Delete this location and everything in it?")) return;
+        await api("locations.php?id=" + modal.dataset.id, "DELETE");
+        modal.close();
+        loadLocations();
+      });
+
+      bindCancel("location-modal");
+
+      // ---------- npcs ----------
+
+      async function loadNpcs(locationId) {
+        el("npcs-heading").textContent = "NPCs — " + state.location.name;
+        const list = el("npcs-list");
+        list.innerHTML = "";
+        const npcs = await api("npcs.php?location_id=" + locationId, "GET");
+        if (!npcs.length) {
+          list.innerHTML = '<div class="empty-state">No NPCs here yet. Create one to get started.</div>';
+          return;
+        }
+        npcs.forEach(function (npc) {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const thumb = document.createElement("div");
+          thumb.className = "card-thumb";
+          thumb.innerHTML = npc.art ? '<img src="' + escapeAttr(npc.art) + '" alt="">' : "No Art";
+
+          const body = document.createElement("div");
+          body.className = "card-body";
+          body.innerHTML = '<div class="card-title">' + escapeHtml(npc.name) + '</div>' +
+            '<div class="card-sub">' + escapeHtml(npc.description || "") + '</div>';
+          body.addEventListener("click", function () {
+            state.npc = npc;
+            showView("responses");
+            renderNpcDetail(npc);
+            loadResponses(npc.id);
+          });
+
+          const actions = document.createElement("div");
+          actions.className = "card-actions";
+          const editBtn = document.createElement("button");
+          editBtn.className = "icon-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", function (e) { e.stopPropagation(); openNpcModal(npc); });
+          actions.appendChild(editBtn);
+
+          card.appendChild(thumb);
+          card.appendChild(body);
+          card.appendChild(actions);
+          list.appendChild(card);
+        });
+      }
+
+      el("new-npc-btn").addEventListener("click", function () { openNpcModal(null); });
+
+      const NPC_TRAITS = ["disposition", "openness", "conscientiousness", "extraversion", "agreeableness", "neuroticism"];
+
+      NPC_TRAITS.forEach(function (t) {
+        const input = el("npc-" + t);
+        const out = el("npc-" + t + "-val");
+        input.addEventListener("input", function () { out.textContent = input.value; });
+      });
+
+      function openNpcModal(npc) {
+        const modal = el("npc-modal");
+        el("npc-modal-title").textContent = npc ? "Edit NPC" : "New NPC";
+        el("npc-name").value = npc ? npc.name : "";
+        el("npc-desc").value = npc ? (npc.description || "") : "";
+        NPC_TRAITS.forEach(function (t) {
+          const def = t === "disposition" ? 0 : 5;
+          const val = npc ? npc[t] : def;
+          el("npc-" + t).value = val;
+          el("npc-" + t + "-val").textContent = val;
+        });
+        modal.dataset.id = npc ? npc.id : "";
+        const deleteBtn = modal.querySelector(".npc-delete");
+        deleteBtn.hidden = !npc;
+        modal.showModal();
+      }
+
+      el("npc-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const modal = el("npc-modal");
+        const payload = { name: el("npc-name").value, description: el("npc-desc").value, location_id: state.location.id };
+        NPC_TRAITS.forEach(function (t) { payload[t] = Number(el("npc-" + t).value); });
+        const id = modal.dataset.id;
+        if (id) {
+          const updated = await api("npcs.php?id=" + id, "PUT", payload);
+          if (state.npc && state.npc.id === updated.id) {
+            state.npc = updated;
+            renderNpcDetail(updated);
+          }
+        } else {
+          await api("npcs.php", "POST", payload);
+        }
+        modal.close();
+        loadNpcs(state.location.id);
+      });
+
+      el("npc-modal").querySelector(".npc-delete").addEventListener("click", async function () {
+        const modal = el("npc-modal");
+        if (!confirm("Delete this NPC and all their responses?")) return;
+        await api("npcs.php?id=" + modal.dataset.id, "DELETE");
+        modal.close();
+        loadNpcs(state.location.id);
+      });
+
+      bindCancel("npc-modal");
+
+      el("edit-npc-btn").addEventListener("click", function () { openNpcModal(state.npc); });
+
+      function renderNpcDetail(npc) {
+        el("npc-detail-name").textContent = npc.name;
+        el("npc-detail-desc").textContent = npc.description || "";
+        const artBox = el("npc-art-box");
+        artBox.innerHTML = npc.art ? '<img src="' + escapeAttr(npc.art) + '" alt="">' : "No Art";
+        const traitsEl = el("npc-detail-traits");
+        traitsEl.innerHTML = NPC_TRAITS.map(function (t) {
+          return '<div>' + t + ': ' + npc[t] + '</div>';
+        }).join("");
+      }
+
+      el("npc-art-input").addEventListener("change", async function () {
+        const file = el("npc-art-input").files[0];
+        if (!file || !state.npc) return;
+
+        try {
+          let data;
+          if (mockMode) {
+            data = await mockUploadArt(state.npc.id, file);
+          } else {
+            const form = new FormData();
+            form.append("npc_id", state.npc.id);
+            form.append("art", file);
+            const res = await fetch("api/upload.php", { method: "POST", body: form });
+            if (res.status === 401) { showLogin(); return; }
+            data = await res.json();
+            if (!res.ok) { alert(data.error || "Upload failed"); return; }
+          }
+          state.npc.art = data.art;
+          renderNpcDetail(state.npc);
+        } catch (err) {
+          alert(err.message || "Upload failed");
+        }
+        el("npc-art-input").value = "";
+      });
+
+      // ---------- responses ----------
+
+      async function loadResponses(npcId) {
+        const list = el("responses-list");
+        list.innerHTML = "";
+        const responses = await api("responses.php?npc_id=" + npcId, "GET");
+        state.responses = responses;
+        renderJsonPanel();
+        if (!responses.length) {
+          list.innerHTML = '<div class="empty-state">No responses yet. Add what this NPC says.</div>';
+          return;
+        }
+        responses.forEach(function (r) {
+          const card = document.createElement("div");
+          card.className = "response-card";
+          card.innerHTML =
+            '<div class="rc-row">' +
+            '<div class="rc-call"><div class="rc-label">Call</div><div class="rc-text">' + escapeHtml(r.call) + '</div></div>' +
+            '<div class="rc-response"><div class="rc-label">Response</div><div class="rc-text">' + escapeHtml(r.response) + '</div></div>' +
+            '</div>' +
+            (r.effect ? '<div class="rc-effect">Effect: ' + escapeHtml(r.effect) + '</div>' : '') +
+            '<div class="rc-actions"></div>';
+          const actions = card.querySelector(".rc-actions");
+          const editBtn = document.createElement("button");
+          editBtn.className = "icon-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", function () { openResponseModal(r); });
+          actions.appendChild(editBtn);
+          list.appendChild(card);
+        });
+      }
+
+      el("new-response-btn").addEventListener("click", function () { openResponseModal(null); });
+
+      function openResponseModal(r) {
+        const modal = el("response-modal");
+        el("response-modal-title").textContent = r ? "Edit Response" : "New Response";
+        el("resp-call").value = r ? r.call : "";
+        el("resp-response").value = r ? r.response : "";
+        el("resp-effect").value = r ? (r.effect || "") : "";
+        modal.dataset.id = r ? r.id : "";
+        const deleteBtn = modal.querySelector(".resp-delete");
+        deleteBtn.hidden = !r;
+        modal.showModal();
+      }
+
+      el("response-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const modal = el("response-modal");
+        const payload = {
+          npc_id: state.npc.id,
+          call: el("resp-call").value,
+          response: el("resp-response").value,
+          effect: el("resp-effect").value,
+        };
+        const id = modal.dataset.id;
+        if (id) {
+          await api("responses.php?id=" + id, "PUT", payload);
+        } else {
+          await api("responses.php", "POST", payload);
+        }
+        modal.close();
+        loadResponses(state.npc.id);
+      });
+
+      el("response-modal").querySelector(".resp-delete").addEventListener("click", async function () {
+        const modal = el("response-modal");
+        if (!confirm("Delete this response?")) return;
+        await api("responses.php?id=" + modal.dataset.id, "DELETE");
+        modal.close();
+        loadResponses(state.npc.id);
+      });
+
+      bindCancel("response-modal");
+
+      // ---------- helpers ----------
+
+      function bindCancel(modalId) {
+        el(modalId).querySelector(".cancel-btn").addEventListener("click", function () {
+          el(modalId).close();
+        });
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str == null ? "" : String(str);
+        return div.innerHTML;
+      }
+
+      function escapeAttr(str) {
+        return escapeHtml(str).replace(/"/g, "&quot;");
+      }
+
+      checkAuth();
+    })();
+  </script>
+</body>
+
+</html>

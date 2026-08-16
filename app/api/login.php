@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../private/auth.php';
-require_once __DIR__ . '/../../private/helpers.php';
-require_once __DIR__ . '/../../private/config.php';
+require_once __DIR__ . '/../private/auth.php';
+require_once __DIR__ . '/../private/helpers.php';
+require_once __DIR__ . '/../private/config.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 

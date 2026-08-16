@@ -17,7 +17,12 @@ if (!isset($_FILES['art']) || $_FILES['art']['error'] !== UPLOAD_ERR_OK) {
     respond_error('No image uploaded');
 }
 
-$allowed = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+$allowed = [
+    'image/png' => 'png', 
+    'image/jpeg' => 'jpg', 
+    'image/webp' => 'webp', 
+    'image/gif' => 'gif'
+    ];
 $mime = mime_content_type($_FILES['art']['tmp_name']);
 if (!isset($allowed[$mime])) {
     respond_error('Unsupported image type');

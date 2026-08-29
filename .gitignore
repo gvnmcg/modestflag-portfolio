@@ -1,4 +1,7 @@
 node_modules
-private/config.php
 app/uploads/*
 !app/uploads/.gitkeep
+**/config.php
+forms/private/submissions/*
+!forms/private/submissions/.gitkeep
+.env

@@ -12,6 +12,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const ROOT = path.join(__dirname, '..');
 const TEMPLATE_PATH = path.join(ROOT, 'generate/template');

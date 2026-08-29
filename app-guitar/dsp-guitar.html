@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guitar Chord Detector</title>
+  <link rel="stylesheet" href="./dsp-guitar.css">
+</head>
+<body>
+  <h1>Guitar Chord Detector</h1>
+  <p class="subtitle">Detects multiple notes and identifies chords</p>
+  
+  <div class="container">
+    <div class="controls">
+      <button id="startBtn">Start Listening</button>
+      <button id="stopBtn" disabled>Stop</button>
+      <label class="file-upload-label" for="audioFileInput">Upload Audio</label>
+      <input type="file" id="audioFileInput" accept="audio/*">
+      <button id="processUploadBtn" disabled>Process Upload</button>
+    </div>
+    
+    <div id="status">Click "Start Listening" to begin</div>
+
+    <!-- Settings -->
+    <div class="settings-panel">
+      <h2>Settings</h2>
+      <div class="settings-row">
+        <div class="setting-group">
+          <label>Min Fret:</label>
+          <input type="number" id="minFret" value="0" min="0" max="15">
+        </div>
+        <div class="setting-group">
+          <label>Max Fret:</label>
+          <input type="number" id="maxFret" value="12" min="0" max="15">
+        </div>
+        <div class="setting-group">
+          <label>Sensitivity:</label>
+          <input type="range" id="sensitivity" min="1" max="10" value="5">
+          <span class="setting-value" id="sensitivityValue">5</span>
+        </div>
+        <div class="setting-group">
+          <label>Stability:</label>
+          <input type="range" id="stability" min="1" max="10" value="5">
+          <span class="setting-value" id="stabilityValue">5</span>
+        </div>
+        <div class="setting-group">
+          <label>Mode:</label>
+          <select id="detectionMode">
+            <option value="chord">Chord Detection</option>
+            <option value="single">Single Note</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label>Fade Time:</label>
+          <input type="range" id="fadeTime" min="0" max="10" value="3">
+          <span class="setting-value" id="fadeTimeValue">3s</span>
+        </div>
+        <button id="clearBtn" style="padding: 8px 16px; font-size: 12px; background: #444;">Clear</button>
+      </div>
+      <div class="settings-row" style="margin-top: 15px;">
+        <div class="setting-group">
+          <label>Strings:</label>
+          <div class="string-toggles" id="stringToggles">
+            <button class="string-toggle active" data-string="0">e</button>
+            <button class="string-toggle active" data-string="1">B</button>
+            <button class="string-toggle active" data-string="2">G</button>
+            <button class="string-toggle active" data-string="3">D</button>
+            <button class="string-toggle active" data-string="4">A</button>
+            <button class="string-toggle active" data-string="5">E</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>Sparse Step:</label>
+          <input type="number" id="sparseStep" value="8" min="1" max="64">
+          <span class="setting-value">frames</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chord Display -->
+    <div class="chord-display">
+      <div class="chord-name" id="chordName">-</div>
+      <div class="detected-notes-label">Detected Notes</div>
+      <div class="detected-notes" id="detectedNotes">
+        <span style="color: #666;">Play a chord...</span>
+      </div>
+    </div>
+
+    <!-- Fretboard -->
+    <div class="fretboard-section">
+      <h2>Fretboard - Detected Positions</h2>
+      <div class="fretboard-container">
+        <div class="fret-numbers" id="fretNumbers"></div>
+        <div class="fretboard" id="fretboard"></div>
+        <div class="fret-markers" id="fretMarkers"></div>
+      </div>
+    </div>
+
+    <!-- Frequency Spectrum -->
+    <div class="visualizer-section">
+      <h2>Frequency Spectrum</h2>
+      <canvas id="spectrumCanvas"></canvas>
+    </div>
+
+    <div class="midi-data-section">
+      <h2>Scrollable MIDI Guitar Data</h2>
+      <div id="uploadStatus" class="upload-status">Upload a file and click Process Upload.</div>
+      <div class="midi-playback-controls">
+        <button id="playFramesBtn" disabled>Play</button>
+        <button id="pauseFramesBtn" disabled>Pause</button>
+        <span id="playbackTimeLabel" class="playback-time-label">0.000s / 0.000s</span>
+      </div>
+      <div class="midi-data-scroll">
+        <table class="midi-data-table">
+          <thead>
+            <tr>
+              <th>Time (s)</th>
+              <th>MIDI</th>
+              <th>Notes</th>
+              <th>Chord</th>
+            </tr>
+          </thead>
+          <tbody id="midiDataBody">
+            <tr>
+              <td colspan="4" class="empty-midi-row">No upload data yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Reference -->
+    <div class="string-reference">
+      <h2>Reference Tones (click to hear)</h2>
+      <div class="strings">
+        <div class="string-btn" data-freq="82.41" data-note="E2">
+          <div class="note">E</div>
+          <div class="freq">82.41 Hz</div>
+          <div class="string-num">6th (low)</div>
+        </div>
+        <div class="string-btn" data-freq="110.00" data-note="A2">
+          <div class="note">A</div>
+          <div class="freq">110.00 Hz</div>
+          <div class="string-num">5th</div>
+        </div>
+        <div class="string-btn" data-freq="146.83" data-note="D3">
+          <div class="note">D</div>
+          <div class="freq">146.83 Hz</div>
+          <div class="string-num">4th</div>
+        </div>
+        <div class="string-btn" data-freq="196.00" data-note="G3">
+          <div class="note">G</div>
+          <div class="freq">196.00 Hz</div>
+          <div class="string-num">3rd</div>
+        </div>
+        <div class="string-btn" data-freq="246.94" data-note="B3">
+          <div class="note">B</div>
+          <div class="freq">246.94 Hz</div>
+          <div class="string-num">2nd</div>
+        </div>
+        <div class="string-btn" data-freq="329.63" data-note="E4">
+          <div class="note">E</div>
+          <div class="freq">329.63 Hz</div>
+          <div class="string-num">1st (high)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./dsp-guitar.js">
+  </script>
+</body>
+</html>

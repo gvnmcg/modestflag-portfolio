@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cool Chords - Chord Builder</title>
+  <link rel="stylesheet" href="./dsp-guitar.css">
+  <link rel="stylesheet" href="./cool-chords.css">
+</head>
+<body>
+  <h1>Cool Chords &mdash; Chord Builder</h1>
+  <p class="subtitle">Click frets to build a chord, save it to your library, then stack chords into a progression &middot; <a href="./cool-chords-midi.html">Import a MIDI file instead &rarr;</a></p>
+
+  <div class="container">
+    <div id="status">Click frets on the fretboard below to build a chord.</div>
+
+    <!-- Tuning -->
+    <div class="settings-panel">
+      <h2>Tuning</h2>
+      <div class="settings-row">
+        <div class="setting-group">
+          <label>Preset:</label>
+          <select id="tuningPreset">
+            <option value="Standard E">Standard E</option>
+            <option value="Drop D">Drop D</option>
+            <option value="Half Step Down">Half Step Down</option>
+            <option value="Open G">Open G</option>
+            <option value="Open D">Open D</option>
+            <option value="DADGAD">DADGAD</option>
+            <option value="7-String Standard">7-String Standard</option>
+            <option value="Bass Standard (4)">Bass Standard (4)</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label>Min Fret:</label>
+          <input type="number" id="minFret" value="0" min="0" max="15">
+        </div>
+        <div class="setting-group">
+          <label>Max Fret:</label>
+          <input type="number" id="maxFret" value="15" min="0" max="15">
+        </div>
+        <button id="addStringBtn" type="button" style="padding: 8px 16px; font-size: 12px; background: #444;">+ Add String</button>
+      </div>
+      <div class="tuning-strings" id="tuningStrings"></div>
+    </div>
+
+    <!-- Fretboard -->
+    <div class="fretboard-section">
+      <h2>Fretboard <span class="section-hint">&mdash; click a fret to add/remove that string's note &middot; click a lit fret again to mute the string</span></h2>
+      <div class="fretboard-container">
+        <div class="fret-numbers" id="fretNumbers"></div>
+        <div class="fretboard" id="fretboard"></div>
+        <div class="fret-markers" id="fretMarkers"></div>
+      </div>
+    </div>
+
+    <!-- Chord Editor -->
+    <div class="chord-display">
+      <div class="chord-name" id="chordName">-</div>
+      <div class="detected-notes-label">Notes in this chord</div>
+      <div class="detected-notes" id="detectedNotes">
+        <span style="color: #666;">Click frets on the fretboard to build a chord&hellip;</span>
+      </div>
+      <div class="chord-editor-row">
+        <input type="text" id="chordNameInput" class="chord-name-input" placeholder="Chord name">
+        <button id="playChordBtn" type="button" disabled class="btn-play">Play Chord</button>
+        <button id="saveChordBtn" type="button" disabled class="btn-save">Save to Library</button>
+        <button id="clearChordBtn" type="button" class="btn-plain">New / Clear</button>
+      </div>
+    </div>
+
+    <!-- Chord Library -->
+    <div class="library-section">
+      <h2>Chord Library</h2>
+      <p class="library-hint">Click a card to load its shape back onto the fretboard for editing &middot; <strong>+ Add</strong> appends it to the progression below.</p>
+      <div class="chord-library-grid" id="chordLibraryGrid">
+        <div class="library-empty" id="libraryEmpty">No saved chords yet &mdash; build one above and click "Save to Library".</div>
+      </div>
+    </div>
+
+    <!-- Progression -->
+    <div class="progression-section">
+      <h2>Chord Progression</h2>
+      <div class="progression-toolbar">
+        <button id="playProgressionBtn" type="button" disabled>Play Progression</button>
+        <button id="analyzeProgressionBtn" type="button" disabled>Analyze Key</button>
+        <button id="sendToPianoRollBtn" type="button" disabled>Send to Piano Roll</button>
+        <button id="downloadMidiBtn" type="button" disabled>Download MIDI</button>
+        <button id="clearProgressionBtn" type="button" class="btn-plain">Clear</button>
+      </div>
+      <div class="progression-strip" id="progressionStrip">
+        <div class="progression-empty" id="progressionEmpty">Add chords from your library to build a progression.</div>
+      </div>
+      <div class="analysis-panel" id="analysisPanel" style="display:none;">
+        <div class="analysis-key" id="analysisKey"></div>
+        <div class="analysis-romans" id="analysisRomans"></div>
+      </div>
+    </div>
+
+    <!-- Piano roll (output preview) -->
+    <div class="pianoroll-section" id="pianorollSection" style="display:none;">
+      <h2>Piano Roll <span class="section-hint">&mdash; generated from "Send to Piano Roll"</span></h2>
+      <div class="pianoroll-toolbar">
+        <div class="zoom-controls">
+          <button id="zoomOutBtn" type="button">-</button>
+          <span id="zoomLabel">100 px/s</span>
+          <button id="zoomInBtn" type="button">+</button>
+        </div>
+        <button id="selectAllBtn" type="button">Select All</button>
+        <button id="clearSelectionBtn" type="button">Clear Selection</button>
+        <span class="pianoroll-hint">Drag on the grid to select a section &middot; drag the ruler to select by time &middot; click a note to select it alone &middot; shift-click/drag to add</span>
+      </div>
+      <div class="pianoroll-scroll" id="pianorollScroll">
+        <div class="pianoroll-content" id="pianorollContent">
+          <div class="corner" id="corner"></div>
+          <div class="time-ruler" id="timeRuler"></div>
+          <div class="pitch-labels" id="pitchLabels"></div>
+          <div class="pianoroll-grid" id="pianorollGrid"></div>
+        </div>
+      </div>
+      <div class="selection-info" id="selectionInfo">No notes selected.</div>
+      <button id="playSelectionBtn" type="button" disabled class="btn-play" style="margin-top: 12px;">Play Selection</button>
+    </div>
+  </div>
+
+  <script src="./cool-chords.js"></script>
+</body>
+</html>

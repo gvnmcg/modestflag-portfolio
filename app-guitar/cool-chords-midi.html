@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cool Chords - MIDI to Fretboard</title>
+  <link rel="stylesheet" href="./dsp-guitar.css">
+  <link rel="stylesheet" href="./cool-chords-midi.css">
+</head>
+<body>
+  <h1>Cool Chords &mdash; MIDI to Fretboard</h1>
+  <p class="subtitle">Load a MIDI file, drag-select a section of notes on the grid, see them on the fretboard &middot; <a href="./cool-chords.html">Build chords &amp; progressions instead &rarr;</a></p>
+
+  <div class="container">
+    <div class="controls">
+      <label class="file-upload-label" for="midiFileInput">Upload MIDI File</label>
+      <input type="file" id="midiFileInput" accept=".mid,.midi,audio/midi">
+      <button id="loadDemoBtn" style="background: linear-gradient(135deg, #8e6bff, #6549d4); color: #fff;">Load Demo Progression</button>
+    </div>
+
+    <div id="status">Upload a .mid file or load the demo to begin.</div>
+
+    <!-- Piano roll -->
+    <div class="pianoroll-section" id="pianorollSection" style="display:none;">
+      <h2>MIDI Note Grid</h2>
+      <div class="pianoroll-toolbar">
+        <div class="zoom-controls">
+          <button id="zoomOutBtn" type="button">-</button>
+          <span id="zoomLabel">100 px/s</span>
+          <button id="zoomInBtn" type="button">+</button>
+        </div>
+        <button id="selectAllBtn" type="button">Select All</button>
+        <button id="clearSelectionBtn" type="button">Clear Selection</button>
+        <span class="pianoroll-hint">Drag on the grid to select a section &middot; drag the ruler to select by time &middot; click a note to select it alone &middot; shift-click/drag to add</span>
+      </div>
+      <div class="pianoroll-scroll" id="pianorollScroll">
+        <div class="pianoroll-content" id="pianorollContent">
+          <div class="corner" id="corner"></div>
+          <div class="time-ruler" id="timeRuler"></div>
+          <div class="pitch-labels" id="pitchLabels"></div>
+          <div class="pianoroll-grid" id="pianorollGrid"></div>
+        </div>
+      </div>
+      <div class="selection-info" id="selectionInfo">No notes selected.</div>
+    </div>
+
+    <!-- Tuning -->
+    <div class="settings-panel">
+      <h2>Tuning</h2>
+      <div class="settings-row">
+        <div class="setting-group">
+          <label>Preset:</label>
+          <select id="tuningPreset">
+            <option value="Standard E">Standard E</option>
+            <option value="Drop D">Drop D</option>
+            <option value="Half Step Down">Half Step Down</option>
+            <option value="Open G">Open G</option>
+            <option value="Open D">Open D</option>
+            <option value="DADGAD">DADGAD</option>
+            <option value="7-String Standard">7-String Standard</option>
+            <option value="Bass Standard (4)">Bass Standard (4)</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label>Min Fret:</label>
+          <input type="number" id="minFret" value="0" min="0" max="15">
+        </div>
+        <div class="setting-group">
+          <label>Max Fret:</label>
+          <input type="number" id="maxFret" value="15" min="0" max="15">
+        </div>
+        <button id="addStringBtn" type="button" style="padding: 8px 16px; font-size: 12px; background: #444;">+ Add String</button>
+      </div>
+      <div class="tuning-strings" id="tuningStrings"></div>
+    </div>
+
+    <!-- Chord Display -->
+    <div class="chord-display">
+      <div class="chord-name" id="chordName">-</div>
+      <div class="detected-notes-label">Selected Notes</div>
+      <div class="detected-notes" id="detectedNotes">
+        <span style="color: #666;">Select notes on the grid...</span>
+      </div>
+      <button id="playChordBtn" type="button" disabled style="margin-top: 15px; background: linear-gradient(135deg, #22c55e, #15803d); color: #fff; font-size: 13px; padding: 8px 20px;">Play Selection</button>
+    </div>
+
+    <!-- Fretboard -->
+    <div class="fretboard-section">
+      <h2>Fretboard</h2>
+      <div class="fretboard-container">
+        <div class="fret-numbers" id="fretNumbers"></div>
+        <div class="fretboard" id="fretboard"></div>
+        <div class="fret-markers" id="fretMarkers"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./cool-chords-midi.js"></script>
+</body>
+</html>

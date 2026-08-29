@@ -1,0 +1,246 @@
+/* Piano roll */
+.pianoroll-section {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.pianoroll-section h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 15px;
+}
+
+.pianoroll-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 4px 6px;
+}
+
+.zoom-controls button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-size: 14px;
+  border-radius: 50%;
+  background: rgba(0, 217, 255, 0.15);
+  color: #00d9ff;
+}
+
+#zoomLabel {
+  font-size: 12px;
+  color: #aaa;
+  min-width: 64px;
+  text-align: center;
+}
+
+#selectAllBtn,
+#clearSelectionBtn {
+  font-size: 12px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ccc;
+}
+
+.pianoroll-hint {
+  font-size: 11px;
+  color: #777;
+  flex: 1;
+  min-width: 200px;
+}
+
+.pianoroll-scroll {
+  overflow: auto;
+  height: 420px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pianoroll-content {
+  position: relative;
+}
+
+.corner {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 54px;
+  height: 22px;
+  background: rgba(20, 20, 20, 0.95);
+  z-index: 12;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.time-ruler {
+  position: sticky;
+  top: 0;
+  left: 0;
+  margin-left: 54px;
+  height: 22px;
+  background: rgba(20, 20, 20, 0.95);
+  z-index: 8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ruler-tick {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: crosshair;
+}
+
+.ruler-label {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  font-size: 10px;
+  color: #999;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.pitch-labels {
+  position: sticky;
+  left: 0;
+  top: 22px;
+  width: 54px;
+  z-index: 6;
+  background: rgba(20, 20, 20, 0.95);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: -1px;
+}
+
+.pitch-label {
+  height: 16px;
+  font-size: 9px;
+  color: #999;
+  display: flex;
+  align-items: center;
+  padding-left: 6px;
+  box-sizing: border-box;
+}
+
+.pitch-label.black-key {
+  background: rgba(0, 0, 0, 0.35);
+  color: #666;
+}
+
+.pianoroll-grid {
+  position: absolute;
+  left: 54px;
+  top: 22px;
+  z-index: 1;
+}
+
+.row-stripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.row-stripe.black-key {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.note-block {
+  position: absolute;
+  border-radius: 3px;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.note-block.selected {
+  border: 2px solid #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  z-index: 2;
+}
+
+.selection-box {
+  position: absolute;
+  background: rgba(0, 217, 255, 0.15);
+  border: 1px solid rgba(0, 217, 255, 0.7);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.selection-info {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* Tuning panel */
+.tuning-strings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 15px;
+}
+
+.tuning-string-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tuning-string-index {
+  width: 28px;
+  font-size: 11px;
+  color: #888;
+}
+
+.tuning-note-input {
+  width: 60px;
+  padding: 5px 8px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 13px;
+}
+
+.tuning-adjust-btn,
+.tuning-remove-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  font-size: 11px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ccc;
+}
+
+.tuning-remove-btn {
+  background: rgba(255, 100, 100, 0.15);
+  color: #f88;
+}
+
+.tuning-remove-btn:disabled {
+  opacity: 0.3;
+}
+
+.fretboard-section .string-name {
+  font-size: 10px;
+}

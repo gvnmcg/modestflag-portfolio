@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Soul Acupuncture Clinic - Rio Rancho, Corrales, Albuquerque. Specializing in pain relief, infertility, women's health, and digestive disorders. Call 505.892.7666">
+    <meta name="keywords"
+        content="Rio Rancho, Corrales, Acupuncture, herbal medicine, chinese medicine, pain relief, back pain, sciatica, headaches, migraines, fertility, menopause, allergies, New Mexico">
+    <title>Soul Acupuncture Clinic - Rio Rancho Corrales Albuquerque Acupuncture</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="health-history-form.css">
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <form id="health-history-form" action="health-history-form.php" method="post">
+        <div class="container">
+            <h1>Book an Appointment</h1>
+            <p>Please fill out the form below to book an appointment. We will get back to you as soon as possible.</p>
+            <h2>Patient Health History</h2>
+            <p>Please fill in all the gray boxes.</p>
+
+            <div class="personal-info-section">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="occupation">Occupation:</label>
+                    <input type="text" id="occupation" name="occupation" required>
+                </div>
+                <div class="form-group">
+                    <label for="date-of-birth">Date of Birth:</label>
+                    <input type="date" id="date-of-birth" name="date-of-birth" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <input type="text" id="gender" name="gender" required>
+                </div>
+                <div class="form-group">
+                    <label for="marital-status">Marital Status:</label>
+                    <input type="text" id="marital-status" name="marital-status" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" required>
+                </div>
+                <div class="form-group">
+                    <label for="zip">Zip:</label>
+                    <input type="text" id="zip" name="zip" required>
+                </div>
+                <div class="form-group">
+                    <label for="emergency-contact">Emergency Contact:</label>
+                    <input type="text" id="emergency-contact" name="emergency-contact" required>
+                </div>
+                <div class="form-group">
+                    <label for="emergency-contact-phone">Emergency Contact Phone:</label>
+                    <input type="tel" id="emergency-contact-phone" name="emergency-contact-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="emergency-contact-relationship">Emergency Contact Relationship:</label>
+                    <input type="text" id="emergency-contact-relationship" name="emergency-contact-relationship" required>
+                </div>
+                <div class="form-group">
+                    <label for="how-did-you-hear-about-us">How did you hear about us:</label>
+                    <input type="text" id="how-did-you-hear-about-us" name="how-did-you-hear-about-us" required>
+                </div>
+            </div>
+
+            <div class="health-concerns-section">
+                <div class="form-group">
+                    <label for="health-concerns">Health Concerns:</label>
+                    <input type="text" id="health-concerns" name="health-concerns" required>
+                </div>
+            </div>
+
+            <p>Successful health care and preventative medicine are only possible when the physician has a complete
+                understanding of the
+                patient physically, mentally, and emotionally. Please complete this questionnaire as thoroughly as
+                possible.</p>
+
+            <div class="form-group">
+                <label for="health-care">Are you currently receiving health care?</label>
+                <input type="checkbox" id="health-care" name="health-care" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-where">If yes, where and from whom?</label>
+                <input type="text" id="health-care-where" name="health-care-where" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-referred">Has your case been referred to an attorney?</label>
+                <input type="checkbox" id="health-care-referred" name="health-care-referred" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-referred-explain">Please explain:</label>
+                <input type="text" id="health-care-referred-explain" name="health-care-referred-explain" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-pregnant">Are you pregnant or planning on becoming pregnant, or is there any
+                    possibility you could be pregnant?</label>
+                <input type="checkbox" id="health-care-pregnant" name="health-care-pregnant" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-pregnant-explain">Please explain:</label>
+                <input type="text" id="health-care-pregnant-explain" name="health-care-pregnant-explain" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-chronic-infectious">Do you have any chronic infectious diseases?</label>
+                <input type="checkbox" id="health-care-chronic-infectious" name="health-care-chronic-infectious"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-chronic-infectious-explain">Please explain:</label>
+                <input type="text" id="health-care-chronic-infectious-explain"
+                    name="health-care-chronic-infectious-explain" required>
+            </div>
+            <div class="form-group">
+                <label for="health-care-chronic-illness">Are you currently suffering from any chronic illness?</label>
+                <input type="checkbox" id="health-care-chronic-illness" name="health-care-chronic-illness" required>
+            </div>
+
+            <div class="form-group">
+                <label for="health-care-chronic-illness-explain">Please explain:</label>
+                <input type="text" id="health-care-chronic-illness-explain" name="health-care-chronic-illness-explain"
+                    required>
+            </div>
+            <div class="form-group"></div>
+            <label for="health-care-significant-diseases">Significant diseases, injuries, accidents, hospitalizations,
+                surgeries, X-Rays/CAT scans/MRI’s/NMR’s:</label>
+            <input type="text" id="health-care-significant-diseases" name="health-care-significant-diseases" required>
+        
+        <div class="form-group">
+            <label for="health-care-significant-diseases-explain">Please explain:</label>
+            <input type="text" id="health-care-significant-diseases-explain"
+                name="health-care-significant-diseases-explain" required>
+        </div>
+        <div class="form-group"></div>
+        <label for="health-care-significant-diseases-reason">Reason & Date:</label>
+        <input type="text" id="health-care-significant-diseases-reason" name="health-care-significant-diseases-reason"
+            required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-significant-diseases-date">Date:</label>
+            <input type="date" id="health-care-significant-diseases-date" name="health-care-significant-diseases-date"
+                required>
+        </div>
+        <div class="form-group"></div>
+        <label for="health-care-medications">Please list any prescriptive medications, over-the-counter medications,
+            vitamins, and supplements:</label>
+        <input type="text" id="health-care-medications" name="health-care-medications" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medications-name">Name:</label>
+            <input type="text" id="health-care-medications-name" name="health-care-medications-name" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medications-dose">Dose:</label>
+            <input type="text" id="health-care-medications-dose" name="health-care-medications-dose" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medications-type">Please list any foods, drugs, or medications you are
+                hypersensitive or allergic to:</label>
+            <input type="text" id="health-care-medications-type" name="health-care-medications-type" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medications-reaction">Type of reaction:</label>
+            <input type="text" id="health-care-medications-reaction" name="health-care-medications-reaction" required>
+        </div>
+
+        <div class="form-group">
+            <label for="health-care-height">Height:</label>
+            <input type="text" id="health-care-height" name="health-care-height" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-weight">Current Weight:</label>
+            <input type="text" id="health-care-weight" name="health-care-weight" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-weight-past">Past Maximum Weight:</label>
+            <input type="text" id="health-care-weight-past" name="health-care-weight-past" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-weight-when">When?</label>
+            <input type="text" id="health-care-weight-when" name="health-care-weight-when" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-immunizations">Immunizations:</label>
+            <input type="checkbox" id="health-care-immunizations" name="health-care-immunizations" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-immunizations-explain">Please explain:</label>
+            <input type="text" id="health-care-immunizations-explain" name="health-care-immunizations-explain" required>
+        </div>
+        <h2>Family History</h2>
+        <div class="form-group">
+            <label for="health-care-family-history-mother">Mother:</label>
+            <input type="text" id="health-care-family-history-mother" name="health-care-family-history-mother" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-father">Father:</label>
+            <input type="text" id="health-care-family-history-father" name="health-care-family-history-father" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-brothers">Brothers:</label>
+            <input type="text" id="health-care-family-history-brothers" name="health-care-family-history-brothers"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-sisters">Sisters:</label>
+            <input type="text" id="health-care-family-history-sisters" name="health-care-family-history-sisters"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-age-at-death">Age at death:</label>
+            <input type="text" id="health-care-family-history-age-at-death"
+                name="health-care-family-history-age-at-death" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-cause-of-death">Cause of death:</label>
+            <input type="text" id="health-care-family-history-cause-of-death"
+                name="health-care-family-history-cause-of-death" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-health">Health:</label>
+            <input type="text" id="health-care-family-history-health" name="health-care-family-history-health" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-cancer">Cancer:</label>
+            <input type="text" id="health-care-family-history-cancer" name="health-care-family-history-cancer" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-diabetes">Diabetes:</label>
+            <input type="text" id="health-care-family-history-diabetes" name="health-care-family-history-diabetes"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-heart-disease">Heart Disease:</label>
+            <input type="text" id="health-care-family-history-heart-disease"
+                name="health-care-family-history-heart-disease" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-blood-pressure">Blood Pressure:</label>
+            <input type="text" id="health-care-family-history-blood-pressure"
+                name="health-care-family-history-blood-pressure" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-stroke">Stroke:</label>
+            <input type="text" id="health-care-family-history-stroke" name="health-care-family-history-stroke" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-family-history-mental-illness">Mental Illness:</label>
+            <input type="text" id="health-care-family-history-mental-illness"
+                name="health-care-family-history-mental-illness" required>
+        </div>
+        <div class="form-group"></div>
+        <label for="health-care-family-history-other">Other:</label>
+        <input type="text" id="health-care-family-history-other" name="health-care-family-history-other" required>
+        </div>
+
+        <h2>Current Condition</h2>
+        <p>The following questions apply only to CURRENT condition. Please check all that apply:</p>
+
+        <h3>14. Emotional</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="emotional_mood_swings"> Mood Swings</label>
+            <label><input type="checkbox" name="emotional_depression"> Depression</label>
+            <label><input type="checkbox" name="emotional_anxiety"> Anxiety</label>
+            <label><input type="checkbox" name="emotional_mental_tension"> Mental Tension</label>
+            <label><input type="checkbox" name="emotional_past_traumas"> Past Traumas</label>
+        </div>
+
+        <h3>15. Energy/Immune</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="energy_fatigue"> Fatigue</label>
+            <label><input type="checkbox" name="energy_slow_wound_healing"> Slow Wound Healing</label>
+            <label><input type="checkbox" name="energy_chronic_infections"> Chronic Infections</label>
+            <label><input type="checkbox" name="energy_chronic_fatigue"> Chronic Fatigue Syndrome</label>
+            <label><input type="checkbox" name="energy_other"> Other</label>
+        </div>
+
+        <h3>16. EENT (Eyes, Ears, Nose, Throat)</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="eent_ear_ringing"> Ear Ringing</label>
+            <label><input type="checkbox" name="eent_headaches"> Headaches</label>
+            <label><input type="checkbox" name="eent_sinus_problems"> Sinus Problems</label>
+            <label><input type="checkbox" name="eent_sore_throat"> Sore Throat</label>
+            <label><input type="checkbox" name="eent_tmj"> TMJ</label>
+            <label><input type="checkbox" name="eent_allergies"> Allergies</label>
+        </div>
+
+        <h3>17. Respiratory</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="respiratory_pneumonia"> Pneumonia</label>
+            <label><input type="checkbox" name="respiratory_common_colds"> Common Colds</label>
+            <label><input type="checkbox" name="respiratory_difficulty_breathing"> Difficulty Breathing</label>
+            <label><input type="checkbox" name="respiratory_persistent_cough"> Persistent Cough</label>
+            <label><input type="checkbox" name="respiratory_asthma"> Asthma</label>
+            <label><input type="checkbox" name="respiratory_other"> Other</label>
+        </div>
+
+        <h3>18. Cardiovascular</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="cardiovascular_heart_disease"> Heart Disease</label>
+            <label><input type="checkbox" name="cardiovascular_chest_pain"> Chest Pain</label>
+            <label><input type="checkbox" name="cardiovascular_high_blood_pressure"> High Blood Pressure</label>
+            <label><input type="checkbox" name="cardiovascular_palpitations"> Palpitations/Fluttering</label>
+            <label><input type="checkbox" name="cardiovascular_other"> Other</label>
+        </div>
+
+        <h3>19. Gastrointestinal</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="gastrointestinal_nausea"> Nausea/Vomiting</label>
+            <label><input type="checkbox" name="gastrointestinal_abdominal_pain"> Abdominal Pain</label>
+            <label><input type="checkbox" name="gastrointestinal_heartburn"> Heartburn</label>
+            <label><input type="checkbox" name="gastrointestinal_gall_bladder"> Gall Bladder Disease</label>
+            <label><input type="checkbox" name="gastrointestinal_liver"> Liver Disease</label>
+            <label><input type="checkbox" name="gastrointestinal_hemorrhoids"> Hemorrhoids</label>
+            <label><input type="checkbox" name="gastrointestinal_blood_stool"> Blood in Stool</label>
+            <label><input type="checkbox" name="gastrointestinal_diarrhea"> Diarrhea</label>
+            <label><input type="checkbox" name="gastrointestinal_constipation"> Constipation</label>
+            <label><input type="checkbox" name="gastrointestinal_other"> Other</label>
+        </div>
+
+        <h3>20. Genito-Urinary</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="genito_urinary_kidney"> Kidney Disease</label>
+            <label><input type="checkbox" name="genito_urinary_painful_urination"> Painful Urination</label>
+            <label><input type="checkbox" name="genito_urinary_blood_urine"> Blood in Urine</label>
+            <label><input type="checkbox" name="genito_urinary_nighttime_urination"> Nighttime Urination</label>
+            <label><input type="checkbox" name="genito_urinary_incontinence"> Incontinence</label>
+        </div>
+
+        <h3>21. Female</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="female_irregular_cycles"> Irregular Cycles</label>
+            <label><input type="checkbox" name="female_vaginal_discharge"> Vaginal Discharge</label>
+            <label><input type="checkbox" name="female_bleeding_between_cycles"> Bleeding Between Cycles</label>
+            <label><input type="checkbox" name="female_premenstrual"> Premenstrual Problems</label>
+            <label><input type="checkbox" name="female_menopausal"> Menopausal Symptoms</label>
+            <label><input type="checkbox" name="female_pelvic_pain"> Pelvic Pain</label>
+            <label><input type="checkbox" name="female_infertility"> Infertility</label>
+        </div>
+
+        <h3>22. Menstrual & Birthing History</h3>
+        <div class="form-group">
+            <label for="pregnancies">No. of Pregnancies:</label>
+            <input type="number" id="pregnancies" name="pregnancies">
+        </div>
+        <div class="form-group">
+            <label for="live_births">No. of Live Births:</label>
+            <input type="number" id="live_births" name="live_births">
+        </div>
+        <div class="form-group">
+            <label for="miscarriages">No. of Miscarriages/Abortion:</label>
+            <input type="number" id="miscarriages" name="miscarriages">
+        </div>
+        <div class="form-group">
+            <label for="days_menses">Days of Menses:</label>
+            <input type="number" id="days_menses" name="days_menses">
+        </div>
+        <div class="form-group">
+            <label for="days_cycle">Days in Cycle:</label>
+            <input type="number" id="days_cycle" name="days_cycle">
+        </div>
+        <div class="form-group">
+            <label for="birth_control">Type of Birth Control:</label>
+            <input type="text" id="birth_control" name="birth_control">
+        </div>
+
+        <h3>23. Male</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="male_sexual_difficulties"> Sexual Difficulties</label>
+            <label><input type="checkbox" name="male_prostate_problems"> Prostate Problems</label>
+            <label><input type="checkbox" name="male_other"> Other</label>
+        </div>
+
+        <h3>24. Musculoskeletal</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="musculoskeletal_neck_shoulder"> Neck/Shoulder</label>
+            <label><input type="checkbox" name="musculoskeletal_muscle_cramps"> Muscle Cramps</label>
+            <label><input type="checkbox" name="musculoskeletal_arm"> Arm</label>
+            <label><input type="checkbox" name="musculoskeletal_leg"> Leg</label>
+            <label><input type="checkbox" name="musculoskeletal_back"> Back</label>
+            <label><input type="checkbox" name="musculoskeletal_joint"> Joint</label>
+        </div>
+
+        <h3>25. Neurological</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="neurological_vertigo"> Vertigo/Dizziness</label>
+            <label><input type="checkbox" name="neurological_paralysis"> Paralysis</label>
+            <label><input type="checkbox" name="neurological_numbness"> Numbness</label>
+            <label><input type="checkbox" name="neurological_loss_balance"> Loss of Balance</label>
+            <label><input type="checkbox" name="neurological_seizures"> Seizures</label>
+            <label><input type="checkbox" name="neurological_stroke"> Stroke</label>
+        </div>
+
+        <h3>26. Metabolic</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="metabolic_hypothyroidism"> Hypothyroidism</label>
+            <label><input type="checkbox" name="metabolic_hypoglycemia"> Hypoglycemia</label>
+            <label><input type="checkbox" name="metabolic_hyperthyroidism"> Hyperthyroidism</label>
+            <label><input type="checkbox" name="metabolic_diabetes"> Diabetes</label>
+            <label><input type="checkbox" name="metabolic_night_sweats"> Night Sweats</label>
+            <label><input type="checkbox" name="metabolic_other"> Other</label>
+        </div>
+
+        <h3>27. Other</h3>
+        <div class="checkbox-group">
+            <label><input type="checkbox" name="other_anemia"> Anemia</label>
+            <label><input type="checkbox" name="other_cancer"> Cancer</label>
+            <label><input type="checkbox" name="other_rashes"> Rashes</label>
+            <label><input type="checkbox" name="other_eczema"> Eczema/Hives</label>
+            <label><input type="checkbox" name="other_cold_hands_feet"> Cold Hands/Feet</label>
+            <label><input type="checkbox" name="other_other"> Other</label>
+        </div>
+
+        <h2>Lifestyle</h2>
+        <div class="form-group">
+            <label for="health-care-lifestyle-food">Please indicate typical food and beverage intake:</label>
+            <input type="text" id="health-care-lifestyle-food" name="health-care-lifestyle-food" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-exercise">Daily Exercise: How many hours:</label>
+            <input type="text" id="health-care-lifestyle-exercise" name="health-care-lifestyle-exercise" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-sleep">Sleep: Good or Poor, No. of Hours:</label>
+            <input type="text" id="health-care-lifestyle-sleep" name="health-care-lifestyle-sleep" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-occupation">Occupation: Employer: Hrs/Wk: Enjoy work?</label>
+            <input type="text" id="health-care-lifestyle-occupation" name="health-care-lifestyle-occupation" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-nicotine">Nicotine and Tobacco Use per Day:</label>
+            <input type="text" id="health-care-lifestyle-nicotine" name="health-care-lifestyle-nicotine" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-alcohol">Alcohol Consumption per Week:</label>
+            <input type="text" id="health-care-lifestyle-alcohol" name="health-care-lifestyle-alcohol" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-lifestyle-caffeine">Caffeine Consumption per Week:</label>
+            <input type="text" id="health-care-lifestyle-caffeine" name="health-care-lifestyle-caffeine" required>
+        </div>
+
+        <h2>Medical History</h2>
+        <div class="form-group">
+            <label for="health-care-medical-history-pacemaker"> Pacemaker:</label>
+            <input type="checkbox" id="health-care-medical-history-pacemaker"
+                name="health-care-medical-history-pacemaker" required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medical-history-coumadin">Coumadin:</label>
+            <input type="checkbox" id="health-care-medical-history-coumadin" name="health-care-medical-history-coumadin"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="health-care-medical-history-pregnancy">Pregnancy:</label>
+            <input type="checkbox" id="health-care-medical-history-pregnancy"
+                name="health-care-medical-history-pregnancy" required>
+        </div>
+
+        <h2>Current Medications</h2>
+        <div class="form-group">
+            <label for="health-care-current-medications-name">Name:</label>
+            <input type="text" id="health-care-current-medications-name" name="health-care-current-medications-name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="health-care-current-medications-dose">Dose:</label>
+            <input type="text" id="health-care-current-medications-dose" name="health-care-current-medications-dose"
+                required>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Health History Form</button>
+
+    </div>
+    </form>
+
+
+
+    <script>
+        async function loadHTML(url, targetElement) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const content = await response.text();
+                document.querySelector(targetElement).innerHTML = content;
+            } catch (error) {
+                console.error('Error loading content:', error);
+            }
+        }
+
+        function collectHealthHistoryFormData(formElement) {
+            const formData = {};
+            const fields = formElement.querySelectorAll('input, select, textarea');
+
+            fields.forEach((field) => {
+                if (!field.name) {
+                    return;
+                }
+
+                if (field.type === 'checkbox') {
+                    formData[field.name] = field.checked;
+                    return;
+                }
+
+                if (field.type === 'radio') {
+                    if (field.checked) {
+                        formData[field.name] = field.value;
+                    } else if (!(field.name in formData)) {
+                        formData[field.name] = '';
+                    }
+                    return;
+                }
+
+                formData[field.name] = field.value.trim();
+            });
+
+            return formData;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            loadHTML('./components/header.html', 'header');
+            loadHTML('./components/footer.html', 'footer');
+
+            const form = document.getElementById('health-history-form');
+            if (!form) {
+                return;
+            }
+
+            form.addEventListener('submit', function () {
+                const payload = collectHealthHistoryFormData(form);
+
+                let payloadInput = form.querySelector('input[name="payload_json"]');
+                if (!payloadInput) {
+                    payloadInput = document.createElement('input');
+                    payloadInput.type = 'hidden';
+                    payloadInput.name = 'payload_json';
+                    form.appendChild(payloadInput);
+                }
+
+                payloadInput.value = JSON.stringify(payload);
+            });
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>
